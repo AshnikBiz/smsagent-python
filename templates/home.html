@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Home</li>
+{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+      <div class="container text-center">
+            
+    <p class="lead">SmsAgent</p>
+    <h1 class="display-4">Setup Infrastructure Agent</h1>
+    <hr class="my-4">
+    <p></p>
+    {% if user.is_authenticated %}
+      <a class="btn btn-primary btn-lg" href="{% url 'logout' %}" role="button">Logout</a>
+    {% else %}
+      <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Login</a>
+    {% endif %}
+</div>
+  </div>
+{% endblock %}

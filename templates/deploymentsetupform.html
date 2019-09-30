@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Deployment Setup{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Deployment Setup</li>
+{% endblock %}
+
+{% block content %}
+  {% if message %}
+    {% if status == 'success' %}
+      <div class="alert alert-success" role="alert">
+        <strong>Success!</strong> {{ message }}
+      </div>
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+        <strong>Error!</strong> {{ message }}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <div id="success" class="alert alert-success" style="display: none;" role="alert">
+  </div>
+  <div id="error" class="alert alert-danger" style="display: none;" role="alert">
+  </div>
+
+  <table class="table table-sm table-striped">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Key</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="align-middle">Deployment#</td>
+        <td class="align-middle">{{ deployment.deployment_number }}</td>
+      </tr>
+      <tr>
+        <td class="align-middle">Server</td>
+        <td class="align-middle">{{ deployment.server_id }}</td>
+      </tr>
+      <tr>
+        <td class="align-middle">Applications</td>
+        <td class="align-middle">{{ deployment.applications }}</td>
+      </tr>
+      <tr>
+        <td class="align-middle">Tags</td>
+        <td class="align-middle">{{ deployment.tags }}</td>
+      </tr>
+      <tr>
+        <td class="align-middle">Product</td>
+        <td class="align-middle">{{ deployment.products }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-lg-6 col-md-8 col-sm-10 mt-4">
+      <input id="deployment_id" type="hidden" value="{{ deployment.deployment_id }}">
+      <input id="deploymentsetup_id" type="hidden" value="{{ deploymentsetup_id }}">
+      
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="btn btn-success">Save</button>
+        <button id="testBtn" class="btn btn-outline-primary" role="button">Test</button>
+        <a href="{% url 'deployments' %}" class="btn btn-outline-warning" role="button">Cancel</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript"> 
+    var deploymentsetup_id; 
+    deploymentsetup_id = $('#deploymentsetup_id').val();
+    if (deploymentsetup_id == '')
+      $('#testBtn').hide();
+    else 
+      $('#testBtn').show();
+
+    $('#testBtn').click(function(e) {
+      e.preventDefault();
+      $('#success').hide();
+      $('#error').hide();
+      var deployment_id;
+      deployment_id = $('#deployment_id').val();
+      $.ajax({ 
+        url: '{% url "connect" %}',
+        data: {'deployment_id': deploymentsetup_id},
+        dataType: 'json',
+        success: function( data ) {
+          if (data.status == 'error') {
+            $('#error').html("<strong>Error!</strong> " + data.message);
+            $('#error').show();
+          } else {
+            $('#success').html("<strong>Success!</strong> " + data.message);
+            $('#success').show();
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}

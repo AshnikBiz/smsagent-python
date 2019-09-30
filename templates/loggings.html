@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Logging{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Logging</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="table-responsive">
+  <table id="table_id" class="table table-bordered table-sm table-striped">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Deployment#</th>
+        <th>Server</th>
+        <th>Applications</th>
+        <th>Tags</th>
+        <th>Product</th>
+        <th>CPU</th>
+        <th>RAM (MB)</th>
+        <th>Disk (GB)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for logging in loggings %}
+        <tr>
+          <td class="align-middle">{{ logging.deployment_number }}</td>        
+          <td class="align-middle">{{ logging.server_id }}</td>
+          <td class="align-middle">{{ logging.applications }}</td>
+          <td class="align-middle">{{ logging.tags }}</td>
+          <td class="align-middle">{{ logging.products }}</td>
+          <td class="align-middle">{{ logging.num_cpu_cores }}</td>
+          <td class="align-middle">{{ logging.size_ram_mb }}</td>
+          <td class="align-middle">{{ logging.size_disk_gb }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript"> 
+    $('#table_id').DataTable();
+  </script>
+{% endblock %}
