@@ -165,7 +165,7 @@ def connect(request):
 
     file = open('workdir/test/config/sms_connection_test.txt', 'w')
     file.write('[sms_connection_test]\n') 
-    file.write(d.server_id + ' ansible_host=' + d.ipaddress + ' ansible_port=' + str(d.port) + ' ansible_ssh_user=' + d.username + ' ansible_ssh_private_key_file=' + private_key_file_path + ' ansible_user=manager ansible_become=yes')
+    file.write(d.server_id + ' ansible_host=' + d.ipaddress + ' ansible_port=' + str(d.port) + ' ansible_ssh_user=' + d.username + ' ansible_ssh_private_key_file=' + private_key_file_path + " ansible_ssh_extra_args='-o StrictHostKeyChecking=no' ansible_user=manager ansible_become=yes")
     file.close()
 
     subprocess.run(['/bin/bash', 'workdir/cmd/ansibleConnectionTestCmd.sh'], stdout=subprocess.PIPE)
@@ -197,7 +197,7 @@ def initiatelogging(request):
         file1.close()
         subprocess.call(['chmod', '0600', private_key_file_path])
 
-        file.write(d.server_id + ' ansible_host=' + d.ipaddress + ' ansible_port=' + str(d.port) + ' ansible_ssh_user=' + d.username + ' ansible_ssh_private_key_file=' + private_key_file_path + ' ansible_user=manager ansible_become=yes\n')
+        file.write(d.server_id + ' ansible_host=' + d.ipaddress + ' ansible_port=' + str(d.port) + ' ansible_ssh_user=' + d.username + ' ansible_ssh_private_key_file=' + private_key_file_path + " ansible_ssh_extra_args='-o StrictHostKeyChecking=no' ansible_user=manager ansible_become=yes\n")
 
     file.close()
     subprocess.run(['/bin/bash', 'workdir/cmd/ansibleLoggingCmd.sh'], stdout=subprocess.PIPE)

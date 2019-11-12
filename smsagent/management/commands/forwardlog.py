@@ -24,7 +24,7 @@ class Command(BaseCommand):
             file1.close()
             subprocess.call(['chmod', '0600', private_key_file_path])
 
-            file.write(d.server_id + ' ansible_host=' + d.ipaddress + ' ansible_port=' + str(d.port) + ' ansible_ssh_user=' + d.username + ' ansible_ssh_private_key_file=' + private_key_file_path + ' ansible_user=manager ansible_become=yes\n')
+            file.write(d.server_id + ' ansible_host=' + d.ipaddress + ' ansible_port=' + str(d.port) + ' ansible_ssh_user=' + d.username + ' ansible_ssh_private_key_file=' + private_key_file_path + " ansible_ssh_extra_args='-o StrictHostKeyChecking=no' ansible_user=manager ansible_become=yes\n")
 
         file.close()
         subprocess.run(['/bin/bash', 'workdir/cmd/ansibleLoggingCmd.sh'], stdout=subprocess.PIPE)
@@ -74,6 +74,7 @@ class Command(BaseCommand):
         headers = {'content-type': 'application/json'}
         # print(json.dumps({'account_id': app.account_id, 'application_key': app.application_key, 'application_secret': app.application_secret, 'loggings': loggings}))
         response = requests.post(url, data=json.dumps({'account_id': app.account_id, 'application_key': app.application_key, 'application_secret': app.application_secret, 'loggings': loggings}), headers=headers, verify=False)
+        # print(response);
         data = response.json()
         # print(data)
         if data['Message'] == 'Success':
